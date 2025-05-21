@@ -29,5 +29,6 @@ const loginValidation = [
 // Rotas de autenticação
 router.post('/register', registerValidation, authController.register);
 router.post('/login', loginValidation, authController.login);
+router.get('/debug', authController.debug);
 
 module.exports = router;

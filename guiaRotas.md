@@ -42,7 +42,7 @@ POST {{base_url}}/auth/login
 ```json
 {
   "email": "admin@example.com",
-  "senha": "admin123"
+  "senha": "batata123"
 }
 ```
 

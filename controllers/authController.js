@@ -126,3 +126,21 @@ exports.register = async (req, res, next) => {
     next(error);
   }
 };
+
+exports.debug = async (req, res, next) => {
+  try {
+    const usuarios = await Usuario.findAll({
+      attributes: ['id', 'nome', 'email', 'role', 'status']
+    });
+    
+    const totalUsuarios = await Usuario.count();
+    
+    res.status(200).json({
+      status: 'success',
+      totalUsuarios,
+      usuarios
+    });
+  } catch (error) {
+    next(error);
+  }
+};
