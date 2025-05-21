@@ -1,7 +1,7 @@
+
 const jwt = require('jsonwebtoken');
 const { Usuario } = require('../models');
 
-// Middleware para verificar o token JWT
 exports.authenticate = async (req, res, next) => {
   try {
     // Verificar se o header de autorização existe
