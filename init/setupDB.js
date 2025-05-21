@@ -18,7 +18,7 @@ const setupDatabase = async () => {
     console.log('Empresa padrão criada');
 
     // Criar usuário administrador
-    const senhaHash = await bcrypt.hash('admin123', 12);
+    const senhaHash = await bcrypt.hash('batata123', 12);
     await Usuario.create({
       nome: 'Administrador',
       email: 'admin@example.com',
