@@ -1,6 +1,8 @@
-# Portal de Gestão de Acessos
+# Portal de Gestão de Acessos - Backend API
 
-Este projeto consiste em uma API para um sistema de gerenciamento de acessos que permite criar e gerenciar usuários, empresas e suas permissões. O sistema implementa controle de acesso baseado em funções (RBAC) com três níveis de acesso: Admin, Gerente e Operador.
+Este projeto consiste em uma API RESTful para um sistema de gerenciamento de acessos que permite criar e gerenciar usuários, empresas e suas permissões, além de simular a geração de requisições JSON para Oracle Cloud Infrastructure (OCI). O sistema implementa controle de acesso baseado em funções (RBAC) com três níveis de acesso: Admin, Gerente e Operador.
+
+> **Nota**: Esta é a implementação do backend. A integração com o frontend será realizada em uma etapa posterior do projeto.
 
 ## 📋 Estrutura do Projeto
 
@@ -8,46 +10,46 @@ Este projeto consiste em uma API para um sistema de gerenciamento de acessos que
 PORTAL-GESTAO-ACESSOS/
 │
 ├── config/
-│   └── database.js
+│   └── database.js       # Configuração de conexão com o MySQL
 │
 ├── controllers/
-│   ├── authController.js
-│   ├── empresaController.js
-│   ├── jsonController.js
-│   ├── logController.js
-│   └── usuarioController.js
+│   ├── authController.js     # Lógica de autenticação
+│   ├── empresaController.js  # Gerenciamento de empresas
+│   ├── jsonController.js     # Geração de JSONs para OCI (simulação)
+│   ├── logController.js      # Registro e consulta de logs
+│   └── usuarioController.js  # Gerenciamento de usuários
 │
 ├── init/
-│   ├── setupDB.js
-│   ├── auth.js
-│   ├── roles.js
-│   └── validation.js
+│   ├── setupDB.js        # Script para inicialização do banco de dados
+│   ├── auth.js           # Configurações de autenticação
+│   ├── roles.js          # Definição de funções e permissões
+│   └── validation.js     # Validações de entrada
 │
 ├── middleware/
-│   └── [arquivos de middleware personalizados]
+│   └── [arquivos de middleware] # Middlewares personalizados (autenticação, validação, etc.)
 │
 ├── models/
-│   ├── Empresa.js
-│   ├── index.js
-│   ├── Log.js
-│   └── Usuario.js
+│   ├── Empresa.js        # Modelo de dados para empresas
+│   ├── index.js          # Configuração do Sequelize e relações entre modelos
+│   ├── Log.js            # Modelo para registro de atividades
+│   └── Usuario.js        # Modelo de dados para usuários
 │
 ├── routes/
-│   ├── authRoutes.js
-│   ├── empresaRoutes.js
-│   ├── jsonRoutes.js
-│   ├── logRoutes.js
-│   └── usuarioRoutes.js
+│   ├── authRoutes.js     # Rotas de autenticação
+│   ├── empresaRoutes.js  # Rotas para gerenciamento de empresas
+│   ├── jsonRoutes.js     # Rotas para geração de JSONs 
+│   ├── logRoutes.js      # Rotas para consulta de logs
+│   └── usuarioRoutes.js  # Rotas para gerenciamento de usuários
 │
 ├── utils/
-│   └── logger.js
+│   └── logger.js         # Utilitário para registro de logs
 │
-├── .env
-├── .gitignore
-├── app.js
+├── .env                  # Variáveis de ambiente
+├── .gitignore            # Arquivos ignorados pelo Git
+├── app.js                # Configuração do Express
 ├── package-lock.json
 ├── package.json
-└── server.js
+└── server.js             # Inicialização do servidor
 ```
 
 ## 🛠️ Tecnologias Utilizadas
@@ -58,12 +60,32 @@ PORTAL-GESTAO-ACESSOS/
 - **Sequelize**: ORM (Object-Relational Mapping) para Node.js
 - **JWT**: JSON Web Tokens para autenticação
 - **bcrypt**: Para criptografia de senhas
+- **Morgan**: Middleware de logging para Express
 
-## ✅ Requisitos
+## ✅ Requisitos do Projeto
 
-- Node.js (v14+)
-- NPM (v6+)
-- MySQL (v5.7+)
+### 1. Autenticação e Gerenciamento de Usuários
+- Implementação de login e auto-registro de usuários
+- Aprovação de novos usuários por administradores
+- Controle de acesso baseado em funções (Admin, Manager, Operator)
+- Login inicial do sistema: `admin/admin`
+
+### 2. Banco de Dados
+- Armazenamento de usuários, permissões, funções, empresas
+- Formato JSON para integração com OCI
+- Logs de atividades do sistema
+
+### 3. Gerenciamento de Empresas
+- Cadastro e gerenciamento de empresas
+- Associação entre usuários e empresas (1:1)
+- Empresas podem ter múltiplos usuários (1:N)
+
+### 4. Geração de JSON para OCI
+- Simulação de geração de JSONs no formato da API da OCI
+- Endpoints para criação de usuário, grupo e política
+
+### 5. Logs
+- Registro de todas as ações dos usuários no sistema
 
 ## 📥 Instalação
 
@@ -100,9 +122,6 @@ JWT_EXPIRES_IN=1d
 ```bash
 # Crie o banco de dados
 mysql -u root -p -e "CREATE DATABASE portal_gestao_acessos;"
-
-# Execute o script SQL inicial (se você tiver um)
-mysql -u root -p portal_gestao_acessos < setup.sql
 ```
 
 ### 5. Inicialize o banco de dados:
@@ -122,180 +141,56 @@ O sistema trabalha com três níveis de acesso:
 
 1. **Admin**: Acesso total ao sistema, podendo gerenciar usuários, empresas e todas as funcionalidades.
 2. **Gerente**: Pode gerenciar usuários vinculados à sua empresa.
-3. **Operador**: Acesso básico para executar operações padrão.
+3. **Operador**: Acesso básico para gerar e enviar requisições JSON.
 
 O primeiro login de admin é:
 - **Email**: admin@example.com
-- **Senha**: admin123
+- **Senha**: admin
 
-## 📱 Guia de Uso com Postman
+## 📱 API Endpoints
 
-### 📌 Configuração do Postman
+### 🔑 Autenticação
 
-1. Abra o Postman
-2. Crie uma nova coleção chamada "Portal de Gestão de Acessos"
-3. Configure uma variável de ambiente:
-   - Nome: `base_url`
-   - Valor inicial: `http://localhost:3000/api`
-   - Valor atual: `http://localhost:3000/api`
-
-### 🔑 1. Autenticação
-
-#### Login
-- **Método**: POST
-- **URL**: `{{base_url}}/auth/login`
-- **Body** (JSON):
-```json
-{
-  "email": "admin@example.com",
-  "password": "admin123"
-}
 ```
-- **O que acontece**: Retorna um token JWT que deve ser usado nas próximas requisições.
-- **Como usar o token**: Copie o valor do token do campo `token` na resposta.
-
-![Imagem ilustrativa de login no Postman](https://via.placeholder.com/600x300?text=Login+no+Postman)
-
-#### Como configurar o token para as próximas requisições:
-1. Clique na requisição que deseja fazer
-2. Vá na aba "Authorization"
-3. Selecione Type: "Bearer Token"
-4. Cole o token no campo "Token"
-
-![Imagem ilustrativa de configuração do token](https://via.placeholder.com/600x300?text=Configuração+do+Token)
-
-### 👤 2. Gerenciamento de Usuários
-
-#### Cadastrar novo usuário
-- **Método**: POST
-- **URL**: `{{base_url}}/usuarios`
-- **Authorization**: Bearer Token
-- **Body** (JSON):
-```json
-{
-  "nome": "João Silva",
-  "email": "joao@example.com",
-  "senha": "senha123",
-  "empresa_id": 1
-}
+POST /api/login              # Autenticação de usuário
+POST /api/register           # Auto-registro de usuário
 ```
 
-#### Listar todos os usuários
-- **Método**: GET
-- **URL**: `{{base_url}}/usuarios`
-- **Authorization**: Bearer Token
+### 👤 Usuários
 
-#### Obter usuário por ID
-- **Método**: GET
-- **URL**: `{{base_url}}/usuarios/1`
-- **Authorization**: Bearer Token
-
-#### Atualizar usuário
-- **Método**: PUT
-- **URL**: `{{base_url}}/usuarios/1`
-- **Authorization**: Bearer Token
-- **Body** (JSON):
-```json
-{
-  "nome": "João Silva Atualizado",
-  "role": "gerente"
-}
+```
+GET    /api/usuarios         # Listar todos os usuários
+POST   /api/usuarios         # Criar um novo usuário
+GET    /api/usuarios/:id     # Obter usuário por ID
+PUT    /api/usuarios/:id     # Atualizar usuário
+DELETE /api/usuarios/:id     # Excluir usuário
+PATCH  /api/usuarios/:id/aprovar  # Aprovar usuário
 ```
 
-#### Aprovar usuário
-- **Método**: PATCH
-- **URL**: `{{base_url}}/usuarios/1/aprovar`
-- **Authorization**: Bearer Token
+### 🏢 Empresas
 
-#### Excluir usuário
-- **Método**: DELETE
-- **URL**: `{{base_url}}/usuarios/1`
-- **Authorization**: Bearer Token
-
-### 🏢 3. Gerenciamento de Empresas
-
-#### Criar empresa
-- **Método**: POST
-- **URL**: `{{base_url}}/empresas`
-- **Authorization**: Bearer Token
-- **Body** (JSON):
-```json
-{
-  "nome": "Empresa ABC",
-  "localizacao": "São Paulo, SP"
-}
+```
+GET    /api/empresas         # Listar todas as empresas
+POST   /api/empresas         # Criar uma nova empresa
+GET    /api/empresas/:id     # Obter empresa por ID 
+PUT    /api/empresas/:id     # Atualizar empresa
+DELETE /api/empresas/:id     # Excluir empresa
 ```
 
-#### Listar empresas
-- **Método**: GET
-- **URL**: `{{base_url}}/empresas`
-- **Authorization**: Bearer Token
+### 📝 Logs
 
-#### Obter empresa por ID
-- **Método**: GET
-- **URL**: `{{base_url}}/empresas/1`
-- **Authorization**: Bearer Token
-
-#### Atualizar empresa
-- **Método**: PUT
-- **URL**: `{{base_url}}/empresas/1`
-- **Authorization**: Bearer Token
-- **Body** (JSON):
-```json
-{
-  "nome": "Empresa ABC Ltda.",
-  "localizacao": "Rio de Janeiro, RJ"
-}
+```
+GET    /api/logs             # Listar todos os logs
+GET    /api/logs/usuario/:id # Listar logs por usuário
 ```
 
-#### Excluir empresa
-- **Método**: DELETE
-- **URL**: `{{base_url}}/empresas/1`
-- **Authorization**: Bearer Token
+### 💾 Simulação JSON para OCI
 
-### 📝 4. Visualização de Logs
-
-#### Listar logs do sistema
-- **Método**: GET
-- **URL**: `{{base_url}}/logs`
-- **Authorization**: Bearer Token
-
-#### Listar logs por usuário
-- **Método**: GET
-- **URL**: `{{base_url}}/logs/usuario/1`
-- **Authorization**: Bearer Token
-
-### 🔄 Fluxo de Teste Completo
-
-Para testar completamente o sistema, siga este fluxo:
-
-1. **Login como Admin**:
-   - Use `admin@example.com` e `admin123`
-   - Guarde o token recebido
-
-2. **Crie uma Empresa**:
-   - Use o token do admin
-   - Crie uma nova empresa
-
-3. **Cadastre um Usuário Gerente**:
-   - Use o token do admin
-   - Crie um usuário com role "gerente" e associe à empresa criada
-
-4. **Aprove o Usuário Gerente**:
-   - Use o token do admin
-   - Aprove o usuário gerente
-
-5. **Faça Login como Gerente**:
-   - Use as credenciais do gerente
-   - Guarde o novo token
-
-6. **Cadastre um Usuário Operador**:
-   - Use o token do gerente
-   - Crie um usuário com role "operador" na mesma empresa
-
-7. **Verifique os Logs**:
-   - Use o token do admin
-   - Visualize os logs do sistema para verificar as ações realizadas
+```
+POST   /api/simulacao-json/usuario  # Gerar JSON para criação de usuário na OCI
+POST   /api/simulacao-json/grupo    # Gerar JSON para criação de grupo na OCI
+POST   /api/simulacao-json/politica # Gerar JSON para criação de política na OCI
+```
 
 ## 📊 Modelo de Dados
 
@@ -320,12 +215,93 @@ Para testar completamente o sistema, siga este fluxo:
 - **acao**: Descrição da ação realizada
 - **timestamp**: Data e hora da ação
 
+## 📋 Exemplos de Requisição e Resposta
+
+### Login de Usuário
+```
+POST /api/login
+```
+Requisição:
+```json
+{
+  "email": "admin@example.com",
+  "password": "admin"
+}
+```
+Resposta:
+```json
+{
+  "status": "success",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "usuario": {
+    "id": 1,
+    "nome": "Administrador",
+    "email": "admin@example.com",
+    "role": "admin"
+  }
+}
+```
+
+### Criar Empresa
+```
+POST /api/empresas
+```
+Requisição:
+```json
+{
+  "nome": "KNAPP SUDAMERICA",
+  "localizacao": "Curitiba, PR"
+}
+```
+Resposta:
+```json
+{
+  "status": "success",
+  "data": {
+    "id": 1,
+    "nome": "KNAPP SUDAMERICA",
+    "localizacao": "Curitiba, PR",
+    "criado_em": "2025-05-20T10:30:00.000Z"
+  }
+}
+```
+
+### Gerar JSON para OCI (Simulação)
+```
+POST /api/simulacao-json/usuario
+```
+Requisição:
+```json
+{
+  "nome": "novousuario@empresa.com",
+  "descricao": "Usuário para acesso à plataforma"
+}
+```
+Resposta:
+```json
+{
+  "status": "success",
+  "data": {
+    "compartmentId": "ocid1.tenancy.oc1.maisinteligencia.infrastructure",
+    "name": "novousuario@empresa.com",
+    "description": "Usuário para acesso à plataforma"
+  }
+}
+```
+
 ## 🔒 Considerações de Segurança
 
 - Todas as senhas são armazenadas de forma criptografada usando bcrypt
 - A autenticação é realizada via tokens JWT
 - Controle de acesso baseado em funções (RBAC) implementado
 - Validação de entrada em todas as rotas
+- Registro de logs para auditoria
+
+## 🚀 Próximos Passos
+
+- Desenvolvimento do frontend para integração com esta API
+- Interface de usuário seguindo as diretrizes de UI/UX do projeto
+- Implementação de dashboard para visualização de informações
 
 ## 🐛 Resolução de Problemas
 
@@ -345,4 +321,3 @@ Para testar completamente o sistema, siga este fluxo:
 ## 📄 Licença
 
 Este projeto está licenciado sob a licença MIT.
-
