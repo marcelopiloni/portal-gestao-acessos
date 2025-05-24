@@ -9,10 +9,15 @@ const generateToken = (id) => {
   });
 };
 
-// Login de usuário
+// Substitua temporariamente o método login no authController.js por esta versão com debug:
+
 exports.login = async (req, res, next) => {
   try {
     const { email, senha } = req.body;
+
+    console.log('=== DEBUG LOGIN ===');
+    console.log('Email recebido:', email);
+    console.log('Senha recebida:', senha);
 
     // Verificar se email e senha foram fornecidos
     if (!email || !senha) {
@@ -24,6 +29,17 @@ exports.login = async (req, res, next) => {
 
     // Verificar se o usuário existe
     const usuario = await Usuario.findOne({ where: { email } });
+    console.log('Usuário encontrado:', usuario ? 'SIM' : 'NÃO');
+    
+    if (usuario) {
+      console.log('ID do usuário:', usuario.id);
+      console.log('Nome:', usuario.nome);
+      console.log('Email do banco:', usuario.email);
+      console.log('Status:', usuario.status);
+      console.log('Hash armazenado:', usuario.senha_hash);
+      console.log('Tamanho do hash:', usuario.senha_hash ? usuario.senha_hash.length : 'null');
+    }
+
     if (!usuario) {
       return res.status(401).json({
         status: 'error',
@@ -32,8 +48,16 @@ exports.login = async (req, res, next) => {
     }
 
     // Verificar se a senha está correta
+    console.log('Verificando senha...');
     const senhaCorreta = await usuario.verificarSenha(senha);
+    console.log('Senha correta:', senhaCorreta);
+
     if (!senhaCorreta) {
+      // Vamos testar comparação manual também
+      const bcrypt = require('bcryptjs');
+      const comparacaoManual = await bcrypt.compare(senha, usuario.senha_hash);
+      console.log('Comparação manual:', comparacaoManual);
+      
       return res.status(401).json({
         status: 'error',
         message: 'Email ou senha incorretos'
@@ -69,6 +93,7 @@ exports.login = async (req, res, next) => {
       }
     });
   } catch (error) {
+    console.error('Erro no login:', error);
     next(error);
   }
 };

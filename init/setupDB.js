@@ -1,5 +1,4 @@
 require('dotenv').config();
-const bcrypt = require('bcryptjs');
 const { sequelize } = require('../config/database');
 const { Usuario, Empresa } = require('../models');
 
@@ -17,12 +16,11 @@ const setupDatabase = async () => {
     });
     console.log('Empresa padrão criada');
 
-    // Criar usuário administrador
-    const senhaHash = await bcrypt.hash('batata123', 12);
+    // Criar usuário administrador 
     await Usuario.create({
       nome: 'Administrador',
       email: 'admin@example.com',
-      senha_hash: senhaHash,
+      senha_hash: 'batata123', 
       role: 'admin',
       status: 'aprovado',
       empresa_id: empresa.id,
