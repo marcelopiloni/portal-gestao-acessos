@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { AuthProvider, useAuth } from './contexts/AuthContext';
 import { NotificationProvider } from './contexts/NotificationContext';
+import { NotificationContainer } from './components/common/Alert';
 
 // Componentes
 import Header from './components/common/Header';
@@ -141,6 +142,7 @@ const App = () => {
     <AuthProvider>
       <NotificationProvider>
         <AppContent />
+        <NotificationContainer />
       </NotificationProvider>
     </AuthProvider>
   );

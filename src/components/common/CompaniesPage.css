@@ -1,0 +1,172 @@
+/* Estilos para CompaniesPage - adicionar como <style> no JSX ou criar arquivo separado */
+
+.companies-page {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.companies-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 1.5rem;
+}
+
+.company-card {
+  background: white;
+  border-radius: var(--radius-lg);
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+  transition: transform var(--transition-normal);
+}
+
+.company-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+}
+
+.company-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1.5rem;
+  background: var(--primary-color);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.company-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  background: var(--cl-secondary);
+  color: white;
+  border-radius: var(--radius-full);
+  font-size: 1.5rem;
+}
+
+.company-info h3 {
+  color: var(--text-color);
+  margin: 0 0 0.5rem 0;
+  font-size: 1.25rem;
+}
+
+.company-location {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--text-color-nav);
+  margin: 0;
+  font-size: 0.9rem;
+}
+
+.company-location i {
+  color: var(--cl-secondary);
+}
+
+.company-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  padding: 1rem 1.5rem;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.stat-item {
+  text-align: center;
+  padding: 0.5rem;
+}
+
+.stat-number {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: var(--cl-secondary);
+  margin-bottom: 0.25rem;
+}
+
+.stat-label {
+  font-size: 0.8rem;
+  color: var(--text-color-nav);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.company-actions {
+  display: flex;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  justify-content: flex-end;
+}
+
+.company-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  color: var(--text-color);
+  font-size: 0.95rem;
+}
+
+.form-group label i {
+  width: 16px;
+  color: var(--cl-secondary);
+}
+
+.form-input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid var(--border-color);
+  border-radius: var(--radius-md);
+  font-size: 1rem;
+  transition: all var(--transition-normal);
+  background: var(--bg-color);
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--cl-secondary);
+  box-shadow: 0 0 0 3px rgba(65, 109, 156, 0.1);
+  background: white;
+}
+
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border-color);
+}
+
+/* Responsividade */
+@media (max-width: 768px) {
+  .companies-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .company-stats {
+    grid-template-columns: 1fr;
+    gap: 0.5rem;
+  }
+  
+  .company-actions {
+    flex-direction: column;
+  }
+  
+  .form-actions {
+    flex-direction: column;
+  }
+}

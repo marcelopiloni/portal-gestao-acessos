@@ -55,20 +55,20 @@ const UsersPage = () => {
   };
 
   // Filtrar usuários
-  const filteredUsers = users.filter(user => {
-    const matchesSearch = user.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                         user.email.toLowerCase().includes(searchTerm.toLowerCase());
+  const filteredUsers = users.filter(userItem => {
+    const matchesSearch = userItem.nome.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         userItem.email.toLowerCase().includes(searchTerm.toLowerCase());
     
-    const matchesStatus = filterStatus === 'todos' || user.status === filterStatus;
-    const matchesRole = filterRole === 'todos' || user.role === filterRole;
+    const matchesStatus = filterStatus === 'todos' || userItem.status === filterStatus;
+    const matchesRole = filterRole === 'todos' || userItem.role === filterRole;
     
     return matchesSearch && matchesStatus && matchesRole;
   });
 
   // Handlers
-  const handleApproveUser = async (userId, status) => {
+  const handleApproveUser = async (userToApprove, status) => {
     try {
-      const result = await userService.approveUser(userId, status);
+      const result = await userService.approveUser(userToApprove.id, status);
       if (result.success) {
         showSuccess(`Usuário ${status === 'aprovado' ? 'aprovado' : 'rejeitado'} com sucesso!`);
         loadData();
@@ -95,9 +95,9 @@ const UsersPage = () => {
     }
   };
 
-  const openModal = (type, user = null) => {
+  const openModal = (type, userToEdit = null) => {
     setModalType(type);
-    setSelectedUser(user);
+    setSelectedUser(userToEdit);
     setShowModal(true);
   };
 
@@ -135,7 +135,7 @@ const UsersPage = () => {
                 <Button
                   variant="success"
                   onClick={() => {
-                    handleApproveUser(selectedUser.id, 'aprovado');
+                    handleApproveUser(selectedUser, 'aprovado');
                     closeModal();
                   }}
                   icon="fas fa-check"
@@ -145,7 +145,7 @@ const UsersPage = () => {
                 <Button
                   variant="danger"
                   onClick={() => {
-                    handleApproveUser(selectedUser.id, 'rejeitado');
+                    handleApproveUser(selectedUser, 'rejeitado');
                     closeModal();
                   }}
                   icon="fas fa-times"
@@ -295,9 +295,9 @@ const UsersPage = () => {
         <UsersTable
           users={filteredUsers}
           companies={companies}
-          onApprove={(user) => openModal('approve', user)}
-          onAssociate={(user) => openModal('associate', user)}
-          onEdit={(user) => openModal('edit', user)}
+          onApprove={(userToApprove) => openModal('approve', userToApprove)}
+          onAssociate={(userToAssociate) => openModal('associate', userToAssociate)}
+          onEdit={(userToEdit) => openModal('edit', userToEdit)}
           currentUserRole={user.role}
         />
       </div>
