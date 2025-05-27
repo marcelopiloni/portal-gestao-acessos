@@ -1,29 +1,311 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
-  <!-- Meta tags -->
-  <meta name="description" content="Portal de Gestão de Acessos - KNAPP SUDAMERICA" />
-  <meta name="keywords" content="gestão, acessos, usuários, empresas, knapp" />
-  <meta name="author" content="KNAPP SUDAMERICA" />
-  
-  <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <link rel="alternate icon" href="/favicon.ico" />
-  
-  <!-- Font Awesome -->
-  <link 
-    rel="stylesheet" 
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css"
-    crossorigin="anonymous"
-  />
-  
-  <title>Portal de Gestão de Acessos - KNAPP SUDAMERICA</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portal de Gestão de Acessos - KNAPP SUDAMERICA</title>
+    <link rel="stylesheet" href="/src/css/styles.css">
+    <link rel="stylesheet" href="/src/css/components.css">
 </head>
+
 <body>
-  <div id="root"></div>
-  <script type="module" src="/src/main.jsx"></script>
+    <!-- Tela de Login -->
+    <div id="login-screen" class="auth-container">
+        <div class="auth-card">
+            <div class="auth-logo">
+                <a href="https://www.knapp.com/" target="_blank" class="logo-link">
+                    <img src="/assets/images/knapp-logo.png" alt="KNAPP" class="logo-image">
+                </a>
+                <h1>KNAPP SUDAMERICA</h1>
+                <p>Portal de Gestão de Acessos</p>
+
+                <!-- Links Sociais -->
+                <div class="social-links">
+                    <a href="https://www.knapp.com/" target="_blank" class="social-btn" title="Website KNAPP">
+                        <span class="social-icon">🌐</span>
+                    </a>
+                    <a href="https://www.linkedin.com/company/knapp-sudamerica/?originalSubdomain=br" target="_blank"
+                        class="social-btn" title="LinkedIn KNAPP">
+                        <span class="social-icon">💼</span>
+                    </a>
+                </div>
+            </div>
+            <form id="login-form">
+                <div class="form-group">
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Senha</label>
+                    <input type="password" id="login-password" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">Entrar</button>
+            </form>
+            <div class="auth-links">
+                <a href="#" id="show-register">Não tem conta? Cadastre-se</a>
+            </div>
+            <div id="login-message" class="message-container"></div>
+        </div>
+    </div>
+
+    <!-- Tela de Registro -->
+    <div id="register-screen" class="auth-container hidden">
+        <div class="auth-card">
+<div class="auth-logo">
+    <a href="https://www.knapp.com/" target="_blank" class="logo-link">
+        <img src="/assets/images/knapp-logo.png" alt="KNAPP" class="logo-image">
+    </a>
+    <h1>KNAPP SUDAMERICA</h1>
+    <p>Criar Nova Conta</p>
+</div>
+            <form id="register-form">
+                <div class="form-group">
+                    <label for="register-name">Nome Completo</label>
+                    <input type="text" id="register-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-email">Email</label>
+                    <input type="email" id="register-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-password">Senha</label>
+                    <input type="password" id="register-password" required minlength="6">
+                </div>
+                <div class="form-group">
+                    <label for="register-role">Cargo Desejado</label>
+                    <select id="register-role">
+                        <option value="operador">Operador</option>
+                        <option value="gerente">Gerente</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">Cadastrar</button>
+            </form>
+            <div class="auth-links">
+                <a href="#" id="show-login">Já tem conta? Faça login</a>
+            </div>
+            <div id="register-message" class="message-container"></div>
+        </div>
+    </div>
+
+    <!-- Layout Principal (Dashboard) -->
+    <div id="main-app" class="hidden">
+        <!-- Header/Navigation -->
+        <header class="header">
+            <div class="container">
+                <div class="header-content">
+                    <div class="logo">
+                        <h2>KNAPP SUDAMERICA</h2>
+                        <span>Portal de Gestão</span>
+                    </div>
+                    <div class="user-info">
+                        <span id="user-welcome">Bem-vindo, Usuário</span>
+                        <button id="logout-btn" class="btn btn-outline">Sair</button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <div class="main-layout">
+            <!-- Sidebar Navigation -->
+            <nav class="sidebar">
+                <ul class="nav-menu">
+                    <li><a href="#" data-section="dashboard" class="nav-link active">
+                            <span class="nav-icon">📊</span> Dashboard
+                        </a></li>
+                    <li><a href="#" data-section="profile" class="nav-link">
+                            <span class="nav-icon">👤</span> Meu Perfil
+                        </a></li>
+                    <li class="admin-only hidden"><a href="#" data-section="users" class="nav-link">
+                            <span class="nav-icon">👥</span> Usuários
+                        </a></li>
+                    <li class="admin-gerente-only hidden"><a href="#" data-section="companies" class="nav-link">
+                            <span class="nav-icon">🏢</span> Empresas
+                        </a></li>
+                    <li><a href="#" data-section="json-requests" class="nav-link">
+                            <span class="nav-icon">📋</span> Requisições JSON
+                        </a></li>
+                    <li><a href="#" data-section="logs" class="nav-link">
+                            <span class="nav-icon">📝</span> Logs
+                        </a></li>
+                </ul>
+            </nav>
+
+            <!-- Main Content Area -->
+            <main class="main-content">
+                <!-- Dashboard Section -->
+                <section id="dashboard-section" class="content-section">
+                    <div class="section-header">
+                        <h1>Dashboard</h1>
+                        <p>Visão geral do sistema</p>
+                    </div>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <h3 id="total-users">0</h3>
+                            <p>Usuários Totais</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3 id="pending-users">0</h3>
+                            <p>Usuários Pendentes</p>
+                        </div>
+                        <div class="stat-card admin-gerente-only">
+                            <h3 id="total-companies">0</h3>
+                            <p>Empresas</p>
+                        </div>
+                        <div class="stat-card">
+                            <h3 id="recent-logs">0</h3>
+                            <p>Logs Recentes</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Profile Section -->
+                <section id="profile-section" class="content-section hidden">
+                    <div class="section-header">
+                        <h1>Meu Perfil</h1>
+                        <p>Informações da conta</p>
+                    </div>
+                    <div class="profile-card">
+                        <div id="profile-info">
+                            <!-- Conteúdo será carregado dinamicamente -->
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Users Section (Admin only) -->
+                <section id="users-section" class="content-section hidden">
+                    <div class="section-header">
+                        <h1>Gerenciar Usuários</h1>
+                        <p>Controle de usuários do sistema</p>
+                    </div>
+                    <div class="table-container">
+                        <table id="users-table" class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Email</th>
+                                    <th>Cargo</th>
+                                    <th>Status</th>
+                                    <th>Empresa</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Conteúdo será carregado dinamicamente -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Companies Section -->
+                <section id="companies-section" class="content-section hidden">
+                    <div class="section-header">
+                        <h1>Gerenciar Empresas</h1>
+                        <button id="add-company-btn" class="btn btn-primary admin-only">
+                            Adicionar Empresa
+                        </button>
+                    </div>
+                    <div class="table-container">
+                        <table id="companies-table" class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Nome</th>
+                                    <th>Localização</th>
+                                    <th>Usuários</th>
+                                    <th class="admin-only">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Conteúdo será carregado dinamicamente -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- JSON Requests Section -->
+                <section id="json-requests-section" class="content-section hidden">
+                    <div class="section-header">
+                        <h1>Requisições JSON</h1>
+                        <p>Simulação de requisições para OCI</p>
+                    </div>
+                    <div class="json-container">
+                        <div class="json-tabs">
+                            <button class="tab-btn active" data-tab="user-json">Usuário JSON</button>
+                            <button class="tab-btn" data-tab="group-json">Grupo JSON</button>
+                        </div>
+                        <div class="json-content">
+                            <div id="user-json-tab" class="tab-content">
+                                <button id="generate-user-json" class="btn btn-primary">
+                                    Gerar JSON Usuário
+                                </button>
+                                <pre id="user-json-output" class="json-output"></pre>
+                            </div>
+                            <div id="group-json-tab" class="tab-content hidden">
+                                <button id="generate-group-json" class="btn btn-primary">
+                                    Gerar JSON Grupo
+                                </button>
+                                <pre id="group-json-output" class="json-output"></pre>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Logs Section -->
+                <section id="logs-section" class="content-section hidden">
+                    <div class="section-header">
+                        <h1>Logs do Sistema</h1>
+                        <div class="filter-controls">
+                            <input type="date" id="date-start" class="form-control">
+                            <input type="date" id="date-end" class="form-control">
+                            <button id="filter-logs" class="btn btn-outline">Filtrar</button>
+                        </div>
+                    </div>
+                    <div class="table-container">
+                        <table id="logs-table" class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Data/Hora</th>
+                                    <th>Usuário</th>
+                                    <th>Ação</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- Conteúdo será carregado dinamicamente -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+            </main>
+        </div>
+    </div>
+
+    <!-- Modal Container -->
+    <div id="modal-overlay" class="modal-overlay hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title">Modal</h3>
+                <button id="modal-close" class="modal-close">&times;</button>
+            </div>
+            <div class="modal-body" id="modal-body">
+                <!-- Conteúdo do modal será inserido aqui -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Spinner -->
+    <div id="loading-spinner" class="loading-spinner hidden">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/src/js/utils.js"></script>
+    <script src="/src/js/api.js"></script>
+    <script src="/src/js/auth.js"></script>
+    <script src="/src/js/dashboard.js"></script>
+    <script src="/src/js/users.js"></script>
+    <script src="/src/js/companies.js"></script>
+    <script src="/src/components/modal.js"></script>
+    <script src="/src/js/app.js"></script>
 </body>
+
 </html>

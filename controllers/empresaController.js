@@ -2,9 +2,16 @@ const { Empresa, Usuario } = require('../models');
 const { logAction } = require('../utils/logger');
 
 // Listar todas as empresas
+
 exports.getEmpresas = async (req, res, next) => {
   try {
-    const empresas = await Empresa.findAll();
+    const empresas = await Empresa.findAll({
+      include: [{ 
+        model: Usuario, 
+        as: 'usuarios',
+        attributes: ['id', 'nome', 'email', 'role', 'status']
+      }]
+    });
 
     await logAction(req.usuario.id, 'Listagem de empresas');
 
