@@ -4,14 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
-  <!-- Meta tags -->
-  <meta name="description" content="Portal de Gestão de Acessos - KNAPP SUDAMERICA" />
-  <meta name="keywords" content="gestão, acessos, usuários, empresas, knapp" />
-  <meta name="author" content="KNAPP SUDAMERICA" />
-  
-  <!-- Favicon -->
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <link rel="alternate icon" href="/favicon.ico" />
+  <title>Portal de Gestão de Acessos - KNAPP SUDAMERICA</title>
   
   <!-- Font Awesome -->
   <link 
@@ -20,10 +13,386 @@
     crossorigin="anonymous"
   />
   
-  <title>Portal de Gestão de Acessos - KNAPP SUDAMERICA</title>
+  <!-- React Development -->
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  
+  <!-- Axios para HTTP requests -->
+  <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </head>
 <body>
   <div id="root"></div>
-  <script type="module" src="/src/main.jsx"></script>
+  
+  <!-- CSS inline para não ter problemas de import -->
+  <style>
+    :root {
+      --primary-color: rgb(238, 238, 238);
+      --secondary-color: #fcfcfc;
+      --third-color: #e9e9e9;
+      --bg-color: #fefefe;
+      --bg-color-nav: #d2d3d5;
+      --shadow-primary: rgba(0, 0, 0, 0.2);
+      --shadow-secondary: #373a3d;
+      --text-color: black;
+      --text-color-nav: #49494B;
+      --fixed-color: black;
+      --cl-primary: #AEC455;
+      --cl-secondary: #416d9c;
+      --cl-secondary-dark: #345a82;
+      --border-color: rgb(191, 191, 191);
+      --border-secondary: rgba(255, 255, 255, 0.7);
+      --success-color: #28a745;
+      --danger-color: #dc3545;
+      --warning-color: #ffc107;
+      --info-color: #17a2b8;
+      --font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --radius-xl: 16px;
+      --radius-full: 50%;
+      --transition-fast: 0.15s ease;
+      --transition-normal: 0.3s ease;
+      --spacing-xs: 0.25rem;
+      --spacing-sm: 0.5rem;
+      --spacing-md: 1rem;
+      --spacing-lg: 1.5rem;
+      --spacing-xl: 2rem;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: var(--font-family);
+      background-color: var(--bg-color);
+      color: var(--text-color);
+      line-height: 1.6;
+    }
+
+    .login-page {
+      min-height: 100vh;
+      display: flex;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .login-background {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, var(--cl-secondary), var(--cl-secondary-dark));
+      z-index: 1;
+    }
+
+    .login-container {
+      position: relative;
+      z-index: 2;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+    }
+
+    .login-card {
+      background: white;
+      border-radius: var(--radius-xl);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      padding: 3rem;
+      width: 100%;
+      max-width: 450px;
+    }
+
+    .login-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .login-logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 80px;
+      height: 80px;
+      background: linear-gradient(135deg, var(--cl-primary), #9ab043);
+      border-radius: var(--radius-full);
+      margin: 0 auto 1.5rem;
+      font-size: 2.5rem;
+      color: white;
+      box-shadow: 0 10px 20px rgba(174, 196, 85, 0.3);
+    }
+
+    .login-header h1 {
+      font-size: 1.75rem;
+      color: var(--text-color);
+      margin-bottom: 0.5rem;
+      font-weight: 700;
+    }
+
+    .login-header p {
+      color: var(--text-color-nav);
+      font-size: 0.9rem;
+      margin-bottom: 0;
+      font-weight: 500;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-weight: 600;
+      color: var(--text-color);
+      font-size: 0.9rem;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 0.875rem 1rem;
+      border: 2px solid var(--border-color);
+      border-radius: var(--radius-md);
+      font-size: 1rem;
+      transition: all var(--transition-normal);
+      background: var(--bg-color);
+    }
+
+    .form-input:focus {
+      outline: none;
+      border-color: var(--cl-secondary);
+      box-shadow: 0 0 0 3px rgba(65, 109, 156, 0.1);
+      background: white;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      font-family: inherit;
+      font-weight: 600;
+      text-align: center;
+      border: none;
+      border-radius: var(--radius-md);
+      cursor: pointer;
+      transition: all var(--transition-normal);
+      padding: 0.75rem 1.5rem;
+      font-size: 0.95rem;
+      min-height: 44px;
+      width: 100%;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--cl-secondary), var(--cl-secondary-dark));
+      color: white;
+      box-shadow: 0 2px 8px rgba(65, 109, 156, 0.3);
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, var(--cl-secondary-dark), #2a4a6b);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(65, 109, 156, 0.4);
+    }
+
+    .status-message {
+      margin-top: 1rem;
+      padding: 1rem;
+      border-radius: var(--radius-md);
+      font-size: 0.9rem;
+      display: none;
+    }
+
+    .status-success {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+
+    .status-error {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+
+    .demo-credentials {
+      background: var(--primary-color);
+      padding: 1.5rem;
+      border-radius: var(--radius-md);
+      text-align: center;
+      border: 1px solid var(--border-color);
+      margin-top: 1.5rem;
+    }
+
+    .demo-credentials p {
+      margin-bottom: 1rem;
+      font-size: 0.9rem;
+      color: var(--text-color-nav);
+      font-weight: 500;
+    }
+  </style>
+  
+  <!-- App React simples -->
+  <script>
+    const { useState, useEffect } = React;
+    
+    // Componente de Login
+    function LoginApp() {
+      const [formData, setFormData] = useState({
+        email: 'admin@example.com',
+        senha: 'batata123'
+      });
+      const [loading, setLoading] = useState(false);
+      const [status, setStatus] = useState({ show: false, type: '', message: '' });
+
+      const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setFormData(prev => ({
+          ...prev,
+          [name]: value
+        }));
+      };
+
+      const handleSubmit = async (e) => {
+        e.preventDefault();
+        setLoading(true);
+        setStatus({ show: false, type: '', message: '' });
+
+        try {
+          const response = await axios.post('/api/auth/login', formData);
+          
+          if (response.data.status === 'success') {
+            localStorage.setItem('auth_token', response.data.token);
+            localStorage.setItem('user_data', JSON.stringify(response.data.data.usuario));
+            
+            setStatus({
+              show: true,
+              type: 'success',
+              message: 'Login realizado com sucesso! Redirecionando...'
+            });
+            
+            setTimeout(() => {
+              window.location.reload();
+            }, 1500);
+          }
+        } catch (error) {
+          setStatus({
+            show: true,
+            type: 'error',
+            message: error.response?.data?.message || 'Erro ao fazer login'
+          });
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      const fillDemo = (type) => {
+        const credentials = {
+          admin: { email: 'admin@example.com', senha: 'batata123' }
+        };
+        
+        if (credentials[type]) {
+          setFormData(credentials[type]);
+        }
+      };
+
+      return React.createElement('div', { className: 'login-page' },
+        React.createElement('div', { className: 'login-background' }),
+        React.createElement('div', { className: 'login-container' },
+          React.createElement('div', { className: 'login-card' },
+            React.createElement('div', { className: 'login-header' },
+              React.createElement('div', { className: 'login-logo' },
+                React.createElement('i', { className: 'fas fa-shield-alt' })
+              ),
+              React.createElement('h1', null, 'Portal de Gestão'),
+              React.createElement('p', null, 'KNAPP SUDAMERICA - Sistema de Acessos')
+            ),
+            
+            React.createElement('form', { onSubmit: handleSubmit },
+              React.createElement('div', { className: 'form-group' },
+                React.createElement('label', null,
+                  React.createElement('i', { className: 'fas fa-envelope' }),
+                  'Email'
+                ),
+                React.createElement('input', {
+                  type: 'email',
+                  name: 'email',
+                  value: formData.email,
+                  onChange: handleInputChange,
+                  className: 'form-input',
+                  placeholder: 'Digite seu email',
+                  required: true
+                })
+              ),
+              
+              React.createElement('div', { className: 'form-group' },
+                React.createElement('label', null,
+                  React.createElement('i', { className: 'fas fa-lock' }),
+                  'Senha'
+                ),
+                React.createElement('input', {
+                  type: 'password',
+                  name: 'senha',
+                  value: formData.senha,
+                  onChange: handleInputChange,
+                  className: 'form-input',
+                  placeholder: 'Digite sua senha',
+                  required: true
+                })
+              ),
+              
+              React.createElement('button', {
+                type: 'submit',
+                className: 'btn btn-primary',
+                disabled: loading
+              },
+                loading 
+                  ? React.createElement('i', { className: 'fas fa-spinner fa-spin' })
+                  : React.createElement('i', { className: 'fas fa-sign-in-alt' }),
+                loading ? 'Entrando...' : 'Entrar'
+              ),
+              
+              status.show && React.createElement('div', {
+                className: `status-message status-${status.type}`,
+                style: { display: 'block' }
+              },
+                React.createElement('i', { 
+                  className: status.type === 'success' ? 'fas fa-check' : 'fas fa-times' 
+                }),
+                ' ' + status.message
+              )
+            ),
+            
+            React.createElement('div', { className: 'demo-credentials' },
+              React.createElement('p', null, 'Credenciais de demonstração:'),
+              React.createElement('button', {
+                type: 'button',
+                className: 'btn btn-primary',
+                style: { fontSize: '0.8rem', padding: '0.5rem 1rem' },
+                onClick: () => fillDemo('admin')
+              },
+                React.createElement('i', { className: 'fas fa-crown' }),
+                'Admin'
+              )
+            )
+          )
+        )
+      );
+    }
+
+    // Renderizar a aplicação
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(React.createElement(LoginApp));
+  </script>
 </body>
 </html>
